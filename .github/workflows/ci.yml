@@ -10,6 +10,8 @@ jobs:
   verify-and-test:
     name: Lint, Test & Build
     runs-on: ubuntu-latest
+    env:
+      HAS_VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN != '' }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -32,7 +34,7 @@ jobs:
   deploy-vercel:
     name: Deploy to Vercel
     needs: verify-and-test
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && env.HAS_VERCEL_TOKEN == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
